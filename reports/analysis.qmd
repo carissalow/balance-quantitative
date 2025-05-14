@@ -1,0 +1,86 @@
+---
+title: "BALANCE quantitative analyses"
+author: "Mobile Sensing + Health Institute"
+date: today
+format:
+  html:
+    toc: true
+    toc-location: left
+    toc-color: "#3F51B5"
+    number-sections: true
+    theme: cosmo
+    max-width: 3000px
+    fontsize: 1em
+    self-contained: true
+    embed-resources: true
+    fig-dpi: 2000
+    fig-align: right
+    page-layout: full
+    linkcolor: "#3F51B5"
+echo: false
+message: false
+warning: false
+from: "markdown+emoji"
+output-file: "balance_analysis.html"
+---
+
+<br>
+
+# Participant characteristics 
+
+```{=html}
+{{< include "../output/tables/balance_participant_characteristics.html" >}}
+```
+
+<br>
+<br>
+
+# Phase 0
+
+## Participant feedback 
+
+```{=html}
+{{< include "../output/tables/balance_phase0_feedback.html" >}}
+```
+
+<br>
+<br>
+
+# Phase 1 
+
+## Feasibility & acceptability 
+
+### Accrual 
+
+### Retention
+
+### Survey compliance 
+
+```{=html}
+{{< include "../output/tables/balance_phase1_survey_compliance.html" >}}
+```
+<br>
+
+### Fitbit compliance 
+
+### Participant feedback 
+
+```{=html}
+{{< include "../output/tables/balance_phase1_feedback.html" >}}
+```
+
+<br>
+
+## Preliminary effects of intervention 
+
+### Change over time 
+
+- CESD
+- PEAT
+- SIP
+- PROMIS-29 (all domains, t-scores; drop PROPr)  
+
+### Change from month 1 to month 2 
+
+- Goodness rating
+- Step count

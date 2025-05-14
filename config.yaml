@@ -1,0 +1,94 @@
+raw_data:
+  cab:
+    demographics: "BALANCECAB-BaselineDemographics_DATA_2025-05-08_1405.csv"
+  phase0:
+    demographics: "BALANCEPhase0StudyDa-BaselineDemographics_DATA_2025-05-08_1406.csv"
+    feedback: "BALANCEPhase0StudyDa-ParticipantFeedback_DATA_2025-05-08_1213.csv"
+  phase1:
+    demographics: "BALANCEPhase1StudyDa-BaselineDemographics_DATA_2025-05-08_1407.csv"
+    feedback: "BALANCEPhase1StudyDa-ParticipantFeedback_DATA_2025-05-08_1217.csv"
+    promis: "BALANCEPhase1StudyDa-PROMIS_DATA_2025-05-08_1218.csv"
+    scores: "BALANCEPhase1StudyDa-Scores_DATA_2025-05-08_1217.csv"
+
+demographics:
+  categorical_mappings:
+    study_completion: 
+      1: "Currently enrolled"
+      2: "Completed study"
+      3: "Withdrawn"
+      4: "Ineligible"
+    gender:
+      1: "Male"
+      2: "Female"
+      3: "Non-binary"
+    hispanic:
+      0: "Non-Hispanic"
+      1: "Hispanic"
+    marital: 
+      1: "Married"
+      2: "Divorced/separated"
+      3: "Widowed"
+      4: "Never married"
+    employment:
+      1: "Working full time"
+      2: "Working part time"
+      3: "Full time student"
+      4: "Not employed"
+      5: "Retired"
+      6: "Other"
+    education:
+      1: "Less than a high school diploma"
+      2: "High school diploma or equivalent"
+      3: "Some college, no degree"
+      4: "Associate of arts of other 2-year degree"
+      5: "Bachelor's degree"
+      6: "Graduate degree" 
+    mentaldx:
+      1: "Yes, current"
+      2: "Yes, past"
+      3: "No"
+    cancer_status: 
+      1: "Stable"
+      2: "Progressing"
+      3: "In remission"
+      4: "Not sure"
+    cancer_category_participant:
+      1: "Prostate"
+      2: "Colon"
+      3: "Lung"
+      4: "Pancreatic"
+      5: "Other"
+  multiple_choice_mappings:
+    race:
+      1: "White/Caucasian"
+      2: "Black/African American"
+      3: "American Indian or Alaska Native"
+      4: "Asian"
+      5: "Native Hawaiian or Other Pacific Islander"
+      6: "Other"
+    living:
+      1: "Alone"
+      2: "Partner"
+      3: "Children"
+      4: "Other"
+    cancer_treatment:
+      1: "Surgery"
+      2: "Chemotherapy"
+      3: "Radiation"
+      4: "Immunotherapy"
+      5: "Hormone therapy"
+      6: "Other"
+  dates_to_construct: ["diagnosed", "diagnosed_stage4", "treatment"]
+  intervals_to_compute:
+    diagnosed:
+      start: "date_diagnosed"
+      end: "demo_datetime"
+      units: "months"
+    diagnosed_stage4: 
+      start: "date_diagnosed_stage4"
+      end: "demo_datetime"
+      units: "months"
+    treatment": 
+      start: "date_treatment"
+      end: "demo_datetime"
+      units: "days"

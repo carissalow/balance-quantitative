@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  rstudio:
+    image: rocker/verse:4.3.3
+    container_name: balance_quantitative
+    ports:
+      - 127.0.0.1:8787:8787
+    environment:
+      - PASSWORD=${PASSWORD}
+      - RENV_PATHS_CACHE=/renv/cache
+    volumes:
+      - ${PROJECT_PATH}/balance-quantitative:/home/rstudio/balance-quantitative
+      - ${RENV_CACHE_PATH}:/renv/cache

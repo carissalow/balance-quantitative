@@ -1,0 +1,13 @@
+{
+    "save_workspace": "never",
+    "always_save_history": false,
+    "reuse_sessions_for_project_links": true,
+    "posix_terminal_shell": "bash",
+    "initial_working_directory": "~",
+    "highlight_r_function_calls": true,
+    "auto_save_on_blur": true,
+    "syntax_color_console": true,
+    "help_font_size_points": 9,
+    "font_size_points": 9,
+    "editor_theme": "Tomorrow Night 80s"
+}
