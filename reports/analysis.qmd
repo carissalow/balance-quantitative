@@ -82,12 +82,11 @@ output-file: "balance_analysis.html"
 
 ## Preliminary effects of intervention 
 
-### Change over time 
+### Change over time  
 
-- CESD
-- PEAT
-- SIP
-- PROMIS-29 (all domains, t-scores; drop PROPr)  
+```{=html}
+{{< include "../output/tables/balance_anova_results.html" >}}
+```
 
 ### Change from month 1 to month 2 
 
