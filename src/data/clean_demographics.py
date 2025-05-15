@@ -113,7 +113,7 @@ def main():
 
     demos = pd.DataFrame()
 
-    cohorts = ["cab", "phase0", "phase1"]
+    cohorts = list(config["raw_data"].keys())
     for cohort in cohorts:
         input_file_name = config["raw_data"][cohort]["demographics"]
         cohort_demos = pd.read_csv(input_file_path + input_file_name, dtype={"record_id":"str"})

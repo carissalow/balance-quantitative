@@ -54,14 +54,23 @@ output-file: "balance_analysis.html"
 
 ### Retention
 
-### Survey compliance 
+### Engagement 
+
+#### Survey compliance
 
 ```{=html}
 {{< include "../output/tables/balance_phase1_survey_compliance.html" >}}
 ```
 <br>
 
-### Fitbit compliance 
+#### Activity completion
+
+<br>
+
+#### Fitbit compliance 
+
+<br>
+
 
 ### Participant feedback 
 

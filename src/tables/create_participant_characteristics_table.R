@@ -24,17 +24,16 @@ demos <- read_csv(here::here("balance-quantitative", input_file_path, input_file
 demos_to_table <- demos %>%
   mutate(
     cohort = case_when(
-      cohort == "cab" ~ "CAB",
       cohort == "phase0" ~ "Phase 0",
       cohort == "phase1" ~ "Phase 1"
     ),
     cohort = factor(
       cohort,
-      levels = c("CAB", "Phase 0", "Phase 1")
+      levels = c("Phase 0", "Phase 1")
     ),
     gender = factor(
       gender, 
-      levels = c("Female", "Male", "Non-binary")
+      levels = c("Female", "Male")
     ),
     race = factor(
       race_combined, 
@@ -79,7 +78,7 @@ demos_to_table <- demos %>%
       .fns = function(x) factor(x, levels = c("Yes", "No"))
     )
   ) %>%
-  select(
+  dplyr::select(
     cohort, record_id, age, gender, race, marital, living, employment, 
     education, cancer_category_participant, cancer_status, 
     (starts_with("cancer_treatment_") & !contains("combined")), 
@@ -122,7 +121,8 @@ demos_table <- demos_to_table %>%
       days_since_treatment_at_demo_datetime ~ "Time since most recent treatment, days",
       dhls_score ~ "Digital Health Literacy Scale (DHLS) score"
     )
-  )
+  ) %>%
+  add_p()
 
 # hacky way to add "header" row for cancer treatment type items
 insert_row_location <- grep("cancer_treatment_", demos_table$table_body$variable)[1]
