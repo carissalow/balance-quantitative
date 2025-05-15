@@ -15,8 +15,8 @@ def main():
         concat('p', participants.label) as pid,
         '' as platform,
         participants.label,
-        participants.start_date,
-        participants.end_date
+        concat(participants.start_date, ' 00:00:00') as start_date,
+        concat(date_sub(participants.end_date, interval 1 day), ' 23:59:59') as end_date
     from fitbits
     join participants on fitbits.participant_id = participants.id
     where label like '1%'
