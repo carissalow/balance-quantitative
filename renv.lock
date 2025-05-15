@@ -188,6 +188,18 @@
       ],
       "Hash": "2042cd9759cc89a453c4aefef0ce9aae"
     },
+    "TH.data": {
+      "Package": "TH.data",
+      "Version": "1.1-2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "MASS",
+        "R",
+        "survival"
+      ],
+      "Hash": "5b250ad4c5863ee4a68e280fcb0a3600"
+    },
     "V8": {
       "Package": "V8",
       "Version": "4.4.2",
@@ -1740,6 +1752,22 @@
       ],
       "Hash": "4f50122dc256b1b6996a4703fecea821"
     },
+    "multcomp": {
+      "Package": "multcomp",
+      "Version": "1.4-25",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "TH.data",
+        "codetools",
+        "graphics",
+        "mvtnorm",
+        "sandwich",
+        "stats",
+        "survival"
+      ],
+      "Hash": "2688bf2f8d54c19534ee7d8a876d9fc7"
+    },
     "munsell": {
       "Package": "munsell",
       "Version": "0.5.1",
@@ -2318,6 +2346,19 @@
         "xml2"
       ],
       "Hash": "0bcf0c6f274e90ea314b812a6d19a519"
+    },
+    "sandwich": {
+      "Package": "sandwich",
+      "Version": "3.1-0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "stats",
+        "utils",
+        "zoo"
+      ],
+      "Hash": "1cf6ae532f0179350862fefeb0987c9b"
     },
     "sass": {
       "Package": "sass",
