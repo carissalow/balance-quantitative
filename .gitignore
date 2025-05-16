@@ -6,8 +6,18 @@ data/interim/*
 !/data/interim/.gitkeep
 data/processed/*
 !/data/processed/.gitkeep
+
 rapids/*
-!/rapids/.gitkeep
+!rapids/config.yaml
+!rapids/data/
+rapids/data/external/*
+!rapids/data/external/.gitkeep
+rapids/data/raw/*
+!rapids/data/raw/.gitkeep
+rapids/data/interin/*
+!rapids/data/interim/.gitkeep
+rapids/data/processed/*
+!rapids/data/processed/.gitkeep
 
 notebooks/*
 !/notebooks/.gitkeep
