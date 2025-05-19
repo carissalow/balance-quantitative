@@ -3,7 +3,7 @@
 library(tidyverse)
 library(gtsummary)
 
-#### setttings ----
+#### settings ----
 
 stat_decimals <- 2
 range_decimals <- 2
@@ -19,9 +19,9 @@ output_file_name <- "balance_survey_compliance"
 
 #### create table ----
 
-phase1_compliance <- read_csv(here::here(parent_file_path, input_file_path, input_file_name))
+survey_compliance <- read_csv(here::here(parent_file_path, input_file_path, input_file_name))
 
-phase1_compliance_table <- phase1_compliance %>%
+survey_compliance_table <- survey_compliance %>%
   select(record_id, starts_with("rate")) %>%
   mutate(
     across(
@@ -44,7 +44,7 @@ phase1_compliance_table <- phase1_compliance %>%
   )
 
 # rename labels
-phase1_compliance_table$table_body <- phase1_compliance_table$table_body %>%
+survey_compliance_table$table_body <- survey_compliance_table$table_body %>%
   mutate(
     label = label %>%
       gsub(".*completed_", "", .) %>%
@@ -63,8 +63,8 @@ rate_expected_header <- "Percent of expected surveys completed"
 rate_days_header <- "Percent of days with completed survey(s)"
 
 insert_row_locations <- c(
-  grep("rate_expected", phase1_compliance_table$table_body$variable)[1],
-  grep("rate_days", phase1_compliance_table$table_body$variable)[1]
+  grep("rate_expected", survey_compliance_table$table_body$variable)[1],
+  grep("rate_days", survey_compliance_table$table_body$variable)[1]
 )
 
 insert_rows <- tribble(
@@ -73,20 +73,20 @@ insert_rows <- tribble(
   "rate_days", "continuous", "rate_days_header", "label", rate_days_header
 )
 
-phase1_compliance_table$table_body <- phase1_compliance_table$table_body %>%
+survey_compliance_table$table_body <- survey_compliance_table$table_body %>%
   mutate(
     label = ifelse(grepl(paste0(insert_rows$variable, collapse = "|"), variable), paste0("\t", label), label),
     row_type = ifelse(grepl(paste0(insert_rows$variable, collapse = "|"), variable), "level", row_type)
   )
 
-phase1_compliance_table$table_body <- bind_rows(
+survey_compliance_table$table_body <- bind_rows(
   insert_rows[1, ],
-  phase1_compliance_table$table_body[insert_row_locations[1]:(insert_row_locations[2]-1), ],
+  survey_compliance_table$table_body[insert_row_locations[1]:(insert_row_locations[2]-1), ],
   insert_rows[2, ],
-  phase1_compliance_table$table_body[insert_row_locations[2]:nrow(phase1_compliance_table$table_body), ]
+  survey_compliance_table$table_body[insert_row_locations[2]:nrow(survey_compliance_table$table_body), ]
 )
   
-phase1_compliance_table <- phase1_compliance_table %>% 
+survey_compliance_table <- survey_compliance_table %>% 
   bold_labels() %>%
   modify_header(
     label = "**Compliance**"
@@ -102,13 +102,13 @@ phase1_compliance_table <- phase1_compliance_table %>%
 #### save output ----
 
 # Word doc for paper
-phase1_compliance_table %>%
+survey_compliance_table %>%
   gt::gtsave(
     filename = here::here(parent_file_path, output_file_path, glue::glue("{output_file_name}.docx"))
   )
 
 # html for report
-phase1_compliance_table %>%
+survey_compliance_table %>%
   gt::opt_table_font(
     font = list(
       gt::google_font(name = google_font_name)

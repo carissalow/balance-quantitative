@@ -69,6 +69,10 @@ output-file: "balance_analysis.html"
 
 #### Fitbit compliance 
 
+```{=html}
+{{< include "../output/tables/balance_fitbit_compliance.html" >}}
+```
+
 <br>
 
 
@@ -82,13 +86,16 @@ output-file: "balance_analysis.html"
 
 ## Preliminary effects of intervention 
 
-### Change over time  
+### Change over time 
 
 ```{=html}
 {{< include "../output/tables/balance_anova_results.html" >}}
 ```
 
-### Change from month 1 to month 2 
+<br>
 
-- Goodness rating
-- Step count
+### Change from Phase 1 to Phase 2
+
+```{=html}
+{{< include "../output/tables/balance_ttest_results.html" >}}
+```

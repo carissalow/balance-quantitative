@@ -31,6 +31,10 @@ paired_t_test <- function(data, x, y, id) {
     mutate(
       data_x = x,
       data_y = y,
+      data_x_mean = mean(data_for_test[[x]], na.rm = TRUE),
+      data_x_sd = sd(data_for_test[[x]], na.rm = TRUE),
+      data_y_mean = mean(data_for_test[[y]], na.rm = TRUE),
+      data_y_sd = sd(data_for_test[[y]], na.rm = TRUE),
       n = length(unique(data_for_test[[id]])),
     ) %>%
     rename_all(function(x) gsub("\\.", "_", x)) %>%
@@ -71,6 +75,7 @@ output_file_name <- glue::glue("paired_ttests_{date_suffix}.csv")
 join_cols <- c("record_id", "study_phase")
 outcome_cols <- c(
   "goodness_score_mean", 
+  "goodness_score_n", 
   "fitbit_steps_intraday_rapids_sumsteps_mean",
   "fitbit_steps_intraday_rapids_sumsteps_n"
 )

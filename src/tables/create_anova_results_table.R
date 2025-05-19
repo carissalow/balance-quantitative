@@ -1,10 +1,10 @@
-# Table results of repeated measures ANOVAs and post-hoc pairwise t-ttests
+# Table results of repeated measures ANOVAs and post-hoc pairwise t-tests
 
 library(tidyverse)
 library(gtsummary)
 library(gt)
 
-#### setttings ----
+#### settings ----
 
 google_font_name <- "Roboto"
 results_date <- "20250519"
