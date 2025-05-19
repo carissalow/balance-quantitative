@@ -50,7 +50,7 @@ def pretty_join(x, prefix=None, sort=False, append_other=False):
     
     return f'{", ".join(x[:-2])}{", " if len(x[:-2]) > 0 else ""}{" & ".join(x[-2:])}'
 
-def flatten_columns(df, sep='_'):
+def flatten_columns(df, sep="_"):
     def _remove_empty(column_name):
         return tuple(element for element in column_name if element)
     def _join(column_name):

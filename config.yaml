@@ -90,3 +90,17 @@ demographics:
       start: "date_treatment"
       end: "demo_datetime"
       units: "days"
+
+fitbit:
+  segments:
+    drop_epochs: True 
+    drop_low_data_yield: False
+  data_yield:
+    feature: "ratiovalidyieldedhours"
+    threshold: 1/3
+  features: [
+    "fitbit_data_yield_rapids_ratiovalidyieldedhours", 
+    "fitbit_heartrate_intraday_rapids_avghr",
+    "fitbit_steps_intraday_rapids_sumsteps",
+    "fitbit_sleep_summary_rapids_sumdurationasleepall"
+  ]
