@@ -38,7 +38,12 @@ repeated_measures_anova <- function(data, outcome, time, id, p_adjust_method = "
     paired = TRUE,
     pool.sd = FALSE,
     p.adjust.method = p_adjust_method,
-    detailed = TRUE
+    detailed = TRUE,
+    comparisons = list(
+      c(2,1),
+      c(3,1),
+      c(3,2)
+    )
   )
   
   # collect results
@@ -74,12 +79,13 @@ repeated_measures_anova <- function(data, outcome, time, id, p_adjust_method = "
 
 date_suffix <- gsub("-", "", today())
 
+parent_file_path <- "balance-quantitative"
 input_file_path <- "data/interim/"
 input_file_name <- "balance_outcomes.csv"
 output_file_path <- "output/results"
 output_file_name <- glue::glue("repeated_measures_anovas_{date_suffix}.csv")
 
-outcomes <- read_csv(here::here("balance-quantitative", input_file_path, input_file_name))
+outcomes <- read_csv(here::here(parent_file_path, input_file_path, input_file_name))
 
 
 #### format data ----
@@ -110,4 +116,4 @@ for (outcome in score_cols) {
   anova_results <- bind_rows(anova_results, result)
 }
 
-write_csv(anova_results, here::here("balance-quantitative", output_file_path, output_file_name))
+write_csv(anova_results, here::here(parent_file_path, output_file_path, output_file_name))

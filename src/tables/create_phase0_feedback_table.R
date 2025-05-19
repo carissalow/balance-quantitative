@@ -9,18 +9,19 @@ stat_decimals <- 1
 label_col_width_px <- 500
 google_font_name <- "Roboto"
 
-config <- yaml::read_yaml(here::here("balance-quantitative", "config.yaml"))
-
+parent_file_path <- "balance-quantitative"
 input_file_path <- "data/raw/"
-input_file_name <- config$raw_data$phase0$feedback
-
 output_file_path <- "output/tables/"
 output_file_name <- "balance_phase0_feedback"
+
+config <- yaml::read_yaml(here::here(parent_file_path, "config.yaml"))
+
+input_file_name <- config$raw_data$phase0$feedback
 
 
 #### create table ----
 
-phase0_feedback <- read_csv(here::here("balance-quantitative", input_file_path, input_file_name))
+phase0_feedback <- read_csv(here::here(parent_file_path, input_file_path, input_file_name))
 
 phase0_feedback_table <- phase0_feedback %>%
   tbl_summary(
@@ -56,7 +57,7 @@ phase0_feedback_table <- phase0_feedback %>%
 # Word doc for paper
 phase0_feedback_table %>%
   gt::gtsave(
-    filename = here::here("balance-quantitative", output_file_path, glue::glue("{output_file_name}.docx"))
+    filename = here::here(parent_file_path, output_file_path, glue::glue("{output_file_name}.docx"))
   )
 
 # html for report
@@ -70,5 +71,5 @@ phase0_feedback_table %>%
     starts_with("label") ~ px(label_col_width_px)
   ) %>%
   gt::gtsave(
-    filename = here::here("balance-quantitative", output_file_path, glue::glue("{output_file_name}.html"))
+    filename = here::here(parent_file_path, output_file_path, glue::glue("{output_file_name}.html"))
   )

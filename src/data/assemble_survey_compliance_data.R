@@ -5,14 +5,15 @@ library(tidyverse)
 
 #### settings ----
 
+parent_file_path <- "balance-quantitative"
 input_file_path <- "data/interim/"
 input_file_name_dates <- "balance_study_dates.csv"
 input_file_name_surveys <- "balance_surveys.csv"
 output_file_path <- "data/interim/"
 output_file_name <- "balance_survey_compliance_data.csv"
 
-study_dates <- read_csv(here::here("balance-quantitative", input_file_path, input_file_name_dates))
-surveys <- read_csv(here::here("balance-quantitative", input_file_path, input_file_name_surveys))
+study_dates <- read_csv(here::here(parent_file_path, input_file_path, input_file_name_dates))
+surveys <- read_csv(here::here(parent_file_path, input_file_path, input_file_name_surveys))
 
 
 #### format data ----
@@ -78,4 +79,4 @@ compliance_data <- study_dates %>%
 
 #### save output ----
 
-write_csv(compliance_data, file = here::here("balance-quantitative", output_file_path, output_file_name))
+write_csv(compliance_data, file = here::here(parent_file_path, output_file_path, output_file_name))

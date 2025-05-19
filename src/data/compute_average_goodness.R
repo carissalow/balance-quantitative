@@ -4,12 +4,13 @@ library(tidyverse)
 
 #### settings ----
 
+parent_file_path <- "balance-quantitative"
 input_file_path <- "data/interim/"
 input_file_name <- "balance_surveys.csv"
 output_file_path <- "data/processed/"
 output_file_name <- "balance_average_goodness.csv"
 
-surveys <- read_csv(here::here("balance-quantitative", input_file_path, input_file_name))
+surveys <- read_csv(here::here(parent_file_path, input_file_path, input_file_name))
 
 
 #### compute average goodness per participant and study phase ----
@@ -35,4 +36,4 @@ average_goodness <- surveys %>%
 
 #### save output ----
 
-write_csv(average_goodness, file = here::here("balance-quantitative", output_file_path, output_file_name))
+write_csv(average_goodness, file = here::here(parent_file_path, output_file_path, output_file_name))

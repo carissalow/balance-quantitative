@@ -10,16 +10,16 @@ stat_decimals <- 1
 label_col_width_px <- 500
 google_font_name <- "Roboto"
 
+parent_file_path <- "balance-quantitative"
 input_file_path <- "data/interim/"
 input_file_name <- "balance_demographics.csv"
-
 output_file_path <- "output/tables/"
 output_file_name <- "balance_participant_characteristics" 
 
 
 #### format data for table ----
 
-demos <- read_csv(here::here("balance-quantitative", input_file_path, input_file_name))
+demos <- read_csv(here::here(parent_file_path, input_file_path, input_file_name))
 
 demos_to_table <- demos %>%
   mutate(
@@ -158,7 +158,7 @@ demos_table <- demos_table %>%
 # Word doc for paper
 demos_table %>%
   gt::gtsave(
-    filename = here::here("balance-quantitative", output_file_path, glue::glue("{output_file_name}.docx"))
+    filename = here::here(parent_file_path, output_file_path, glue::glue("{output_file_name}.docx"))
   )
 
 # html for report
@@ -172,5 +172,5 @@ demos_table %>%
     starts_with("label") ~ px(label_col_width_px)
   ) %>%
   gt::gtsave(
-    filename = here::here("balance-quantitative", output_file_path, glue::glue("{output_file_name}.html"))
+    filename = here::here(parent_file_path, output_file_path, glue::glue("{output_file_name}.html"))
   )

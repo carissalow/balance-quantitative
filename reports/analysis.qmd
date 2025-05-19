@@ -59,7 +59,7 @@ output-file: "balance_analysis.html"
 #### Survey compliance
 
 ```{=html}
-{{< include "../output/tables/balance_phase1_survey_compliance.html" >}}
+{{< include "../output/tables/balance_survey_compliance.html" >}}
 ```
 <br>
 

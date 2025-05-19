@@ -4,12 +4,13 @@ library(tidyverse)
 
 #### settings ----
 
+parent_file_path <- "balance-quantitative"
 input_file_path <- "data/interim/"
 input_file_name <- "balance_survey_compliance_data.csv"
 output_file_path <- "data/processed/"
 output_file_name <- "balance_survey_compliance.csv"
 
-compliance_data <- read_csv(here::here("balance-quantitative", input_file_path, input_file_name))
+compliance_data <- read_csv(here::here(parent_file_path, input_file_path, input_file_name))
 
 
 #### compute compliance ----
@@ -59,4 +60,4 @@ compliance <- compliance_data %>%
 
 #### save output ----
 
-write_csv(compliance, file = here::here("balance-quantitative", output_file_path, output_file_name))
+write_csv(compliance, file = here::here(parent_file_path, output_file_path, output_file_name))

@@ -10,16 +10,16 @@ range_decimals <- 2
 label_col_width_px <- 650
 google_font_name <- "Roboto"
 
+parent_file_path <- "balance-quantitative"
 input_file_path <- "data/processed/"
 input_file_name <- "balance_survey_compliance.csv"
-
 output_file_path <- "output/tables/"
-output_file_name <- "balance_phase1_survey_compliance"
+output_file_name <- "balance_survey_compliance"
 
 
 #### create table ----
 
-phase1_compliance <- read_csv(here::here("balance-quantitative", input_file_path, input_file_name))
+phase1_compliance <- read_csv(here::here(parent_file_path, input_file_path, input_file_name))
 
 phase1_compliance_table <- phase1_compliance %>%
   select(record_id, starts_with("rate")) %>%
@@ -104,7 +104,7 @@ phase1_compliance_table <- phase1_compliance_table %>%
 # Word doc for paper
 phase1_compliance_table %>%
   gt::gtsave(
-    filename = here::here("balance-quantitative", output_file_path, glue::glue("{output_file_name}.docx"))
+    filename = here::here(parent_file_path, output_file_path, glue::glue("{output_file_name}.docx"))
   )
 
 # html for report
@@ -118,5 +118,5 @@ phase1_compliance_table %>%
     starts_with("label") ~ px(label_col_width_px)
   ) %>%
   gt::gtsave(
-    filename = here::here("balance-quantitative", output_file_path, glue::glue("{output_file_name}.html"))
+    filename = here::here(parent_file_path, output_file_path, glue::glue("{output_file_name}.html"))
   )

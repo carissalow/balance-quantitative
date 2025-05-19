@@ -1,3 +1,5 @@
+# Table results of repeated measures ANOVAs and post-hoc pairwise t-ttests
+
 library(tidyverse)
 library(gtsummary)
 library(gt)
@@ -5,18 +7,18 @@ library(gt)
 #### setttings ----
 
 google_font_name <- "Roboto"
+results_date <- "20250519"
 
-input_file_date <- "20250515"
+parent_file_path <- "balance-quantitative"
 input_file_path <- "output/results"
-input_file_name <- glue::glue("repeated_measures_anovas_{input_file_date}.csv")
-
+input_file_name <- glue::glue("repeated_measures_anovas_{results_date}.csv")
 output_file_path <- "output/tables/"
 output_file_name <- "balance_anova_results"
 
 
 #### format data ----
 
-results <- read_csv(here::here("balance-quantitative", input_file_path, input_file_name))
+results <- read_csv(here::here(parent_file_path, input_file_path, input_file_name))
 
 results <- results %>%
   mutate(
@@ -123,10 +125,7 @@ bolded_rows <- which(!grepl("^\t", results_to_table$outcome_name))
 f_df_footnote_rows <- which(results_to_table$anova_correction_applied == 1)
 
 f_df <- unique(results_to_table[which(results_to_table$anova_correction_applied == 0), ]$anova_df)
-f_df_label <- paste0("{{F_", gsub(" .*$", "", f_df), " _", gsub("^.*, ", "", f_df), "}}")
-
 t_df <- unique(results_to_table[which(results_to_table$`ttest_df_t1 to t2` != ""), ]$`ttest_df_t1 to t2`)
-t_df_label <- paste0("{{t_", t_df, "}}")
 
 anova_results_table <- results_to_table %>%
   dplyr::select(
@@ -138,11 +137,8 @@ anova_results_table <- results_to_table %>%
   ) %>%
   cols_label(
     outcome_name ~ "Outcome measure",
-    anova_f ~ f_df_label,
     anova_p_str ~ "p-value",
-    anova_ges ~ "{{:eta:[_g^2]}}",
     contains("ttest_estimate") ~ "MD",
-    contains("ttest_statistic") ~ t_df_label,
     contains("ttest_p") ~ "p-value"
   ) %>%
   tab_spanner(
@@ -207,21 +203,31 @@ anova_results_table <- results_to_table %>%
 
 # Word doc for paper
 anova_results_table %>%
+  cols_label(
+    anova_f ~ paste0("F (", f_df, ")"),
+    anova_ges ~ "Generalized eta-squared",
+    contains("ttest_statistic") ~ paste0("t (", t_df, ")"),
+  ) %>%
   gtsave(
-    filename = here::here("balance-quantitative", output_file_path, glue::glue("{output_file_name}.docx"))
+    filename = here::here(parent_file_path, output_file_path, glue::glue("{output_file_name}.docx"))
   )
 
 # html for report
 anova_results_table %>%
-  opt_table_font(
-    font = list(
-      gt::google_font(name = google_font_name)
-    )
+  cols_label(
+    anova_f ~ paste0("{{F_", gsub(" .*$", "", f_df), " _", gsub("^.*, ", "", f_df), "}}"),
+    anova_ges ~ "{{:eta:[_g^2]}}",
+    contains("ttest_statistic") ~ paste0("{{t_", t_df, "}}")
   ) %>%
   cols_width(
     1 ~ px(250),
     everything() ~ 70
   ) %>%
+  opt_table_font(
+    font = list(
+      gt::google_font(name = google_font_name)
+    )
+  ) %>%
   gtsave(
-    filename = here::here("balance-quantitative", output_file_path, glue::glue("{output_file_name}.html"))
+    filename = here::here(parent_file_path, output_file_path, glue::glue("{output_file_name}.html"))
   )

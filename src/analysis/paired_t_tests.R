@@ -46,27 +46,41 @@ paired_t_test <- function(data, x, y, id) {
   return(out)
 }
 
+read_averages <- function(input_file, input_file_path, parent_file_path) {
+  data <- read_csv(here::here(parent_file_path, input_file_path, input_file))
+  if ("phase" %in% colnames(data)) {
+    data <- data %>%
+      filter(phase != "overall") %>%
+      mutate(phase = as.integer(phase)) %>%
+      rename(study_phase = phase)
+  }
+  return(data)
+}
+
 
 #### settings ----
 
 date_suffix <- gsub("-", "", today())
 
+parent_file_path <- "balance-quantitative"
 input_file_path <- "data/processed/"
-input_file_names <- c("balance_average_goodness.csv")
-#input_file_names <- c("balance_average_goodness.csv", "balance_average_fitbit.csv")
+input_file_names <- c("balance_average_goodness.csv", "balance_average_fitbit_features.csv")
 output_file_path <- "output/results"
 output_file_name <- glue::glue("paired_ttests_{date_suffix}.csv")
 
 join_cols <- c("record_id", "study_phase")
-outcome_cols <- c("goodness_score_mean")
-#outcome_cols <- c("goodness_score_mean", "fitbit_steps_intraday_rapids_sumsteps_mean")
+outcome_cols <- c(
+  "goodness_score_mean", 
+  "fitbit_steps_intraday_rapids_sumsteps_mean",
+  "fitbit_steps_intraday_rapids_sumsteps_n"
+)
 
 
 #### format data for analysis ----
 
 outcomes <- input_file_names %>%
   purrr::map(
-    function(x) read_csv(here::here("balance-quantitative", input_file_path, x))
+    function(x) read_averages(x, input_file_path, parent_file_path) 
   ) %>%
   purrr::reduce(full_join, by = join_cols)
 
@@ -74,8 +88,8 @@ outcomes_wide <- outcomes %>%
   pivot_wider(
     id_cols = record_id,
     names_from = study_phase,
-    values_from = any_of(outcome_cols),
-    names_glue = "{.value}_phase{.name}"
+    values_from = all_of(outcome_cols),
+    names_glue = "{.value}_phase{study_phase}"
   ) %>%
   arrange(record_id) %>%
   mutate( 
@@ -108,4 +122,4 @@ for (outcome in outcome_cols) {
   ttest_results <- bind_rows(ttest_results, result)
 }
 
-write_csv(ttest_results, here::here("balance-quantitative", output_file_path, output_file_name))
+write_csv(ttest_results, here::here(parent_file_path, output_file_path, output_file_name))
