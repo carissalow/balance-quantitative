@@ -42,7 +42,7 @@ def main():
     """
 
     activity_preference_suffix = f""" 
-    select
+    select distinct
         pId as record_id,
         study_phase,
         pid_activity_preferences.activityId as activity_id,
@@ -50,6 +50,7 @@ def main():
         custom_activity
     from pid_activity_preferences  
     join activity_id_to_name on pid_activity_preferences.activityId = activity_id_to_name.activityId
+    where pId like '1%' and pId != '121'
     order by record_id, study_phase, activity_id;    
     """
 

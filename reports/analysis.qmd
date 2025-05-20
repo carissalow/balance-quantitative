@@ -68,7 +68,7 @@ Quantitative feedback about the study app collected during interviews with Phase
 
 <br>  
 
-##### **Table 2.** Phase 0 participant study feedback {.unnumbered}
+##### **Table 2.** Phase 0 participant feedback {.unnumbered}
 ```{=html}
 {{< include "../output/tables/balance_phase0_feedback.html" >}}
 ```
@@ -90,9 +90,9 @@ In general, Phase 1 participants were compliant with study procedures during bot
 
 <br>
 
-##### **Table 3.** Phase 1 participant compliance with survey and Fitbit data collection {.unnumbered}  
+##### **Table 3.** Compliance with survey and Fitbit data collection {.unnumbered}  
 ```{=html}
-{{< include "../output/tables/balance_overall_compliance.html" >}}
+{{< include "../output/tables/balance_combined_compliance.html" >}}
 ```
 
 <br>
@@ -101,7 +101,7 @@ In general, Phase 1 participants were compliant with study procedures during bot
 
 <br>
 
-##### **Table 4.** Phase 1 participant engagement with activity tracking {.unnumbered}
+##### **Table 4.** Engagement with activity tracking {.unnumbered}
 
 
 <br>
@@ -116,7 +116,7 @@ On average, participants rated the app relatively highly on the System Usability
 
 <br>
 
-##### **Table 5.** Phase 1 participant study feedback {.unnumbered}
+##### **Table 5.** Phase 1 participant feedback {.unnumbered}
 ```{=html}
 {{< include "../output/tables/balance_phase1_feedback.html" >}}
 ```
@@ -132,7 +132,7 @@ There were no significant changes in mean daily goodness score (MD=0.04, p=0.75)
 
 <br>
 
-##### **Table 6.** Effect of study time point on participant self-report quality of life measures {.unnumbered}
+##### **Table 6.** Effect of study time point on self-reported quality of life measures {.unnumbered}
 ```{=html}
 {{< include "../output/tables/balance_anova_results.html" >}}
 ```
