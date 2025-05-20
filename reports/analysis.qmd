@@ -5,6 +5,7 @@ date: today
 format:
   html:
     toc: true
+    toc-depth: 5
     toc-location: left
     toc-color: "#3F51B5"
     number-sections: true
@@ -21,13 +22,37 @@ echo: false
 message: false
 warning: false
 from: "markdown+emoji"
-output-file: "balance_analysis.html"
+output-file: "analysis.html"
 ---
 
 <br>
 
-# Participant characteristics 
+# Methods
 
+**Data preprocessing.** Baseline demographics data were cleaned to collapse categories with low frequencies. Self-reported dates of initial and stage IV cancer diagnosis and most recent treatment were verified against the EMR and corrected if necessary and possible; any remaining missing month or day values were imputed with January or 1, respectively. Corrected dates were used to compute the number of months since diagnoses and the number of days since most recent treatment that had elapsed at study baseline for each participant. Scores for all self-report measures were obtained according to the respective instrument's scoring instructions.  
+
+We extracted day-level (midnight to midnight) features from raw Fitbit heart rate, steps, and sleep time series data using RAPIDS (v1.10.1; Vega et al., 2021). We retained for analysis only days with at least 8 valid hours of sufficient Fitbit wear time, where a valid hour was defined as one in which at least any 30 of those 60 minutes had a non-missing, non-zero heart rate value. As a measure of average physical activity, we aggregated daily total step counts (sum of steps) across all valid days separately within each phase of the study for each participant. We also averaged daily goodness scores across all days with an available survey response, separately for each study phase and participant.   
+
+<br>
+
+**Statistical analysis.** Descriptive statistics were used to characterize the sample, as well as to summarize quantitative feedback about the study application from participant interviews and participants' compliance with study procedures. To examine the effect of study time point on self-reported measures of mental and physical well-being, we performed a series of repeated measures ANOVAs, applying the Greenhouse-Geisser correction if there was evidence that sphericity assumption was violated. A series of post-hoc paired t-tests were performed to examine pairwise differences between baseline, midpoint, and end of study. To examine change in average daily goodness and physical activity from phase 1 to phase 2, we performed a series of paired t-tests. Sample sizes differed slightly across analyses due to occasional missing data. Due to the exploratory nature of the analysis, we did not correct for multiple comparisons. An alpha level of 0.05 was used as a strict cutoff for statistical significance. All analyses were performed in Python v3.10.15 and R v4.3.3 (R Core Team, 2024). Data management and analysis code is available on [GitHub](https://github.com/jenniferfedor/balance-quantitative).  
+
+<br>
+<br>
+
+# Results
+
+## Participant characteristics 
+
+A total of N=7 and N=22 participants with stage IV cancer were enrolled in Phase 0 and Phase 1, respectively. Participant characteristics are presented in Table 1.  
+
+Phase 1 participants were aged 62.6 years on average (SD 8, range 48-77), were 50% female, and 77% White/Caucasian. Most participants were married (55%); lived with a partner (50%), were either working full time (36%) or retired (36%), and had attended at least some college (32%) or had received a Bachelor's degree (32%). Most participants had prostate (23%) or other cancer (27%) that was stable (55%). The majority of participants had received chemotherapy (68%), but fewer participants had received surgical (27%), radiation (41%), immunotherapy (41%), hormone therapy (14%), or other treatments (23%) for their cancer. At baseline, on average 27.1 months (SD 19.7, range 3-63) had elapsed since participants' cancer diagnosis, 21.1 months (SD 16.9, range 3-56) had elapsed since their stage IV cancer diagnosis, and 41 days (SD 109.5, range 0-482) had elapsed since their most recent treatment. Participants generally had high digital health literacy (mean DHLS score 9.4/12, SD 2.3, range 3-12).  
+
+Characteristics of Phase 0 participants were generally similar to those of Phase 1 participants. There were no statistically significant differences between the two cohorts in terms of demographic or clinical characteristics (all p>0.1).
+
+<br>
+
+##### **Table 1.** Participant characteristics {.unnumbered}
 ```{=html}
 {{< include "../output/tables/balance_participant_characteristics.html" >}}
 ```
@@ -35,10 +60,15 @@ output-file: "balance_analysis.html"
 <br>
 <br>
 
-# Phase 0
+## Phase 0
 
-## Participant feedback 
+### Participant feedback 
 
+Quantitative feedback about the study app collected during interviews with Phase 0 participants is summarized in Table 2. On average, participants felt the app was easy (mean 7.9/10, SD 1.2, range 7-10), pleasant (mean 8.6, SD 1.1, range 7-10), and not burdensome (mean 1.8, SD 1.1, range 0-3) to use. Participants rated themselves as likely both to participate in the study or use the app themselves (mean 7.8, SD 2.3, range 4-10) and to recommend it to others (mean 9.0, SD 1.2, range 7-10).  
+
+<br>  
+
+##### **Table 2.** Phase 0 participant study feedback {.unnumbered}
 ```{=html}
 {{< include "../output/tables/balance_phase0_feedback.html" >}}
 ```
@@ -46,56 +76,73 @@ output-file: "balance_analysis.html"
 <br>
 <br>
 
-# Phase 1 
+## Phase 1 
 
-## Feasibility & acceptability 
+### Accrual & retention
 
-### Accrual 
+<br>
 
-### Retention
+### Engagement
 
-### Engagement 
+#### Compliance
 
-#### Survey compliance
+In general, Phase 1 participants were compliant with study procedures during both phases of the intervention (Table 3). Overall, participants completed 82.03% of surveys on average (SD 13.95%, range 50-97.62%). On average, during phase 1, participants completed 81.66% of daily surveys (SD 14.38, range 46.43-100), and during phase 2, participants completed 81.49% of morning (SD 21.56, range 21.43-100) and 82.95% of evening surveys (SD 12.76, range 53.57-100). Participants collected sufficient Fitbit data (at least 8 valid hours) on about 73% of all days across and within phase 1 and phase 2; there were n=2 participants who did not collect any days of sufficient Fitbit data during the study, and n=1 participant who collected at least one day with sufficient data during phase 1 but not during phase 2.  
 
+<br>
+
+##### **Table 3.** Phase 1 participant compliance with survey and Fitbit data collection {.unnumbered}  
 ```{=html}
-{{< include "../output/tables/balance_survey_compliance.html" >}}
+{{< include "../output/tables/balance_overall_compliance.html" >}}
 ```
+
 <br>
 
 #### Activity completion
 
 <br>
 
-#### Fitbit compliance 
+##### **Table 4.** Phase 1 participant engagement with activity tracking {.unnumbered}
 
-```{=html}
-{{< include "../output/tables/balance_fitbit_compliance.html" >}}
-```
 
+<br>
 <br>
 
 
 ### Participant feedback 
 
+Quantitative feedback about the study and app collected during end-of-study interviews with Phase 1 participants is summarized in Table 5. 
+
+On average, participants rated the app relatively highly on the System Usability Scale (mean 79.3, SD 16.5, range 43-100). The aspects of the study participants found most valuable were the mid-study data review meeting (mean 8.9/10, SD 1.2), evening check-ins during both phase 2 (mean 8.0, SD 2.1) and phase 1 (mean 7.9, SD 2.0), and morning activity selections during phase 2 (mean 7.5, SD 2.8); participants generally found the mid-study data report (mean 6.8, SD 2.9) and calendar visualizations in the app (mean 5.1, SD 3.7) to be less valuable. Participants were slightly more likely to recommend the app to a friend (mean 8.1/10, SD 2.3) than to continue using the app themselves (mean 6.2, SD 2.9). Although only 18% (4/22) of participants indicated that they had shared any of the data they had collected during the study with others, participants rated their interest in sharing these data with their care team as a 9/10 on average (SD 2.3, range 0-10).   
+
+<br>
+
+##### **Table 5.** Phase 1 participant study feedback {.unnumbered}
 ```{=html}
 {{< include "../output/tables/balance_phase1_feedback.html" >}}
 ```
 
 <br>
+<br>
 
-## Preliminary effects of intervention 
+### Preliminary effects of the intervention 
 
-### Change over time 
+Results of the repeated measures ANOVAs and paired t-tests are displayed in Tables 6 and 7, respectively. There was a small but significant effect of study time point on self-reported anxiety (F(2, 40)=3.52, p=0.039, $\eta_g^2$=0.017). Post-hoc pairwise paired t-tests revealed that there were statistically significant declines in PROMIS anxiety subscale t-scores from study baseline to midpoint (mean difference [MD]=-2.69, t(20)=-2.81, p=0.011) and from baseline to end of study (MD=-2.73, t(20)=-2.24, p=0.037); there was no significant change from midpoint to end of study (p=0.98). There were no significant effects of time point on CESD, PEAT, or SIP, or any other PROMIS subscales (all p>0.1).  
 
+There were no significant changes in mean daily goodness score (MD=0.04, p=0.75) or total step count from phase 1 to phase 2 (MD=409.44, p=0.16). There were no significant differences in compliance between phases, in terms of the number of days on which participants rated their daily goodness (p=0.56) or collected sufficient Fitbit data (at least 8 hours; p=0.94).   
+
+<br>
+
+##### **Table 6.** Effect of study time point on participant self-report quality of life measures {.unnumbered}
 ```{=html}
 {{< include "../output/tables/balance_anova_results.html" >}}
 ```
 
 <br>
 
-### Change from Phase 1 to Phase 2
-
+##### **Table 7.** Change in average daily goodness and physical activity from Phase 1 to Phase 2 {.unnumbered} 
 ```{=html}
 {{< include "../output/tables/balance_ttest_results.html" >}}
 ```
+
+<br>
+<br>  
