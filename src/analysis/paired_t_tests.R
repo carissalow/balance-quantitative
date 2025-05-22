@@ -33,8 +33,12 @@ paired_t_test <- function(data, x, y, id) {
       data_y = y,
       data_x_mean = mean(data_for_test[[x]], na.rm = TRUE),
       data_x_sd = sd(data_for_test[[x]], na.rm = TRUE),
+      data_x_min = min(data_for_test[[x]], na.rm = TRUE),
+      data_x_max = max(data_for_test[[x]], na.rm = TRUE),
       data_y_mean = mean(data_for_test[[y]], na.rm = TRUE),
       data_y_sd = sd(data_for_test[[y]], na.rm = TRUE),
+      data_y_min = min(data_for_test[[y]], na.rm = TRUE),
+      data_y_max = max(data_for_test[[y]], na.rm = TRUE),
       n = length(unique(data_for_test[[id]])),
     ) %>%
     rename_all(function(x) gsub("\\.", "_", x)) %>%

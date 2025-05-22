@@ -1,4 +1,4 @@
-# Table results of repeated measures ANOVAs and post-hoc pairwise t-tests
+# Table results of repeated measures ANOVAs and post-hoc pairwise t-ttests
 
 library(tidyverse)
 library(gtsummary)
@@ -7,11 +7,12 @@ library(gt)
 #### settings ----
 
 google_font_name <- "Roboto"
-results_date <- "20250519"
 
+results_date <- "20250522"
 parent_file_path <- "balance-quantitative"
 input_file_path <- "output/results"
 input_file_name <- glue::glue("repeated_measures_anovas_{results_date}.csv")
+
 output_file_path <- "output/tables/"
 output_file_name <- "balance_anova_results"
 
@@ -37,6 +38,39 @@ results <- results %>%
     ),
     outcome_name = ifelse(grepl("^promis", outcome), paste0("PROMIS ", outcome_name), outcome_name)
   ) 
+
+summary_stats_to_table <- results %>%
+  dplyr::select(
+    outcome_name, matches("^mean_|^sd_|^min_|^max_")
+  ) %>%
+  distinct() %>%
+  pivot_longer(
+    cols = -c(outcome_name),
+    names_to = "name",
+    values_to = "value"
+  ) %>%
+  separate(name, into = c("stat", "timepoint"), sep = "_") %>%
+  pivot_wider(
+    id_cols = c(outcome_name, timepoint),
+    names_from = stat,
+    values_from = value
+  ) %>%
+  mutate(
+    mean = round(mean, 2),
+    sd = round(sd, 2),
+    min = ifelse(min %% 1 == 0, min, round(min, 2)),
+    max = ifelse(max %% 1 == 0, max, round(max, 2)),
+    range = glue::glue("{min}, {max}"),
+    summarystat = glue::glue("{mean} ({sd}) [{range}]")
+  ) %>%
+  pivot_wider(
+    id_cols = outcome_name,
+    names_from = timepoint,
+    values_from = -c(outcome_name, timepoint),
+    names_glue = "{.value}_t{timepoint}"
+  ) %>%
+  dplyr::select(outcome_name, ends_with("t1"), ends_with("t2"), ends_with("t3")) %>%
+  dplyr::select(outcome_name, starts_with("summarystat"))
   
 anova_results_to_table <- results %>% 
   dplyr::select(
@@ -93,7 +127,11 @@ ttest_results_to_table <- results %>%
     outcome_name, ends_with("t1 to t2"), ends_with("t1 to t3"), ends_with("t2 to t3")
   )
 
-results_to_table <- anova_results_to_table %>%
+results_to_table <- summary_stats_to_table %>%
+  select(
+    outcome_name, ends_with("t1"), ends_with("t2"), ends_with("t3")
+  ) %>%
+  full_join(anova_results_to_table, by = "outcome_name") %>%
   full_join(ttest_results_to_table, by = "outcome_name")
 
 insert_row_location <- min(grep("PROMIS", results_to_table$outcome_name))
@@ -138,8 +176,15 @@ anova_results_table <- results_to_table %>%
   cols_label(
     outcome_name ~ "Outcome measure",
     anova_p_str ~ "p-value",
+    summarystat_t1 ~ "Baseline",
+    summarystat_t2 ~ "Midpoint",
+    summarystat_t3 ~ "End of study",
     contains("ttest_estimate") ~ "MD",
     contains("ttest_p") ~ "p-value"
+  ) %>%
+  cols_align(
+    align = "center",
+    columns = starts_with("summarystat")
   ) %>%
   tab_spanner(
     label = "{{Baseline to Midpoint}}", 
@@ -196,6 +241,12 @@ anova_results_table <- results_to_table %>%
     locations = cells_stub(
       rows = f_df_footnote_rows
     )
+  ) %>%
+  tab_footnote(
+    footnote = "Mean (SD) [Range]",
+    locations = cells_column_labels(
+      columns = starts_with("summarystat")
+    )
   )
 
 
@@ -212,7 +263,6 @@ anova_results_table %>%
     filename = here::here(parent_file_path, output_file_path, glue::glue("{output_file_name}.docx"))
   )
 
-# html for report
 anova_results_table %>%
   cols_label(
     anova_f ~ paste0("{{F_", gsub(" .*$", "", f_df), " _", gsub("^.*, ", "", f_df), "}}"),
@@ -221,6 +271,7 @@ anova_results_table %>%
   ) %>%
   cols_width(
     1 ~ px(250),
+    starts_with("summarystat") ~ 200,
     everything() ~ 70
   ) %>%
   opt_table_font(

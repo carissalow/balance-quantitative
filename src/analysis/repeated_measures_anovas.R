@@ -21,7 +21,22 @@ repeated_measures_anova <- function(data, outcome, time, id, p_adjust_method = "
     ) %>%
     filter(n_na == 0) %>% 
     dplyr::select(-n_na) %>%
-    arrange(get(id), get(time))
+    arrange(get(id), get(time)) 
+  
+  # summary stats 
+  summary_stats_by_timepoint <- data_for_test %>%
+    summarize(
+      .by = {{time}},
+      across(
+        .cols = all_of(outcome),
+        .fns = list(mean = mean, sd = sd, min = min, max = max),
+        .names = "{.fn}"
+      )
+    ) %>%
+    pivot_wider(
+      names_from = {{time}},
+      values_from = -all_of(time)
+    )
 
   # repeated measures ANOVA
   anova_formula <- glue::glue("{outcome} ~ {time} + Error({id}/{time})")
@@ -69,7 +84,8 @@ repeated_measures_anova <- function(data, outcome, time, id, p_adjust_method = "
         gsub("\\.$", "", .) %>%
         gsub("\\.\\.", "_", .) %>%
         gsub("\\.", "_", .)
-    ) 
+    ) %>%
+    bind_cols(summary_stats_by_timepoint)
   
   return(out)
 }

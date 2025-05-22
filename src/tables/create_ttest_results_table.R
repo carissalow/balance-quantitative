@@ -8,7 +8,7 @@ library(gt)
 
 google_font_name <- "Roboto"
 
-results_date <- "20250519"
+results_date <- "20250522"
 parent_file_path <- "balance-quantitative"
 input_file_path <- "output/results"
 input_file_name <- glue::glue("paired_ttests_{results_date}.csv")
@@ -50,9 +50,11 @@ ttest_results_to_table <- results %>%
       TRUE ~ as.character(round(p_value, 3))
     ),
     across(
-      .cols = matches("mean_|_mean|_sd"),
+      .cols = matches("mean_|_mean|_sd|_min|_max"),
       .fns = function(x) round(x, 2)
-    )
+    ),
+    data_x_range = glue::glue("{data_x_min}, {data_x_max}"),
+    data_y_range = glue::glue("{data_y_min}, {data_y_max}")
   )
 
 #### create the table ----
@@ -62,7 +64,8 @@ data_x_label <- unique(ttest_results_to_table$data_x)[[1]]
 
 ttest_results_table <- ttest_results_to_table %>%
   select(
-    outcome_str, n, data_y_mean, data_y_sd, data_x_mean, data_x_sd, mean_difference, t, df, p_str
+    outcome_str, n, data_y_mean, data_y_sd, data_y_range, data_x_mean, data_x_sd,
+    data_x_range, mean_difference, t, df, p_str
   ) %>%
   gt(
     rowname_col = "outcome_str"
@@ -71,8 +74,13 @@ ttest_results_table <- ttest_results_to_table %>%
     n ~ "n",
     mean_difference ~ "MD",
     p_str ~ "p-value",
-    ends_with("_mean") ~ "M",
-    ends_with("_sd") ~ "SD"
+    ends_with("_mean") ~ "Mean",
+    ends_with("_sd") ~ "SD",
+    ends_with("_range") ~ "Range"
+  ) %>%
+  cols_align(
+    align = "right",
+    columns = ends_with("range")
   ) %>%
   tab_spanner(
     label = data_y_label, 
@@ -138,6 +146,7 @@ ttest_results_table %>%
   ) %>%
   cols_width(
     1 ~ px(200),
+    ends_with("range") ~ 150,
     everything() ~ 75
   ) %>%
   gtsave(
