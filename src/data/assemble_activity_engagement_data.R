@@ -124,6 +124,9 @@ activity_endorsement_day_level <- endorsed %>%
       )
     )
   ) %>%
+  mutate(
+    endorsed_activity_rating_rate = total_rated/total_endorsed,
+  ) %>%
   summarize(
     .by = record_id,
     across(
@@ -267,4 +270,3 @@ activity_engagement <- activity_selection %>%
   full_join(activity_completion, by = c("record_id"))
 
 write_csv(activity_engagement, here::here(parent_file_path, output_file_path, output_file_name))
-

@@ -97,12 +97,20 @@ In general, Phase 1 participants were compliant with study procedures during bot
 
 <br>
 
-#### Activity completion
+#### Activity tracking  
+
+Characteristics of participants' engagement with activity tracking during both phases of the intervention are presented in Table 4.  
+
+On average participants selected to track during Phase 1 a total of 25 distinct activities (SD 4.6, range 15-32), 3.4% of which were custom activities created by the participant (SD 4.5, range 0-16%). During Phase 1, participants endorsed 209 total (SD 95.8, range 46-415) and 19 unique activities (SD 4.5, range 12-28) on average. Of the activities they endorsed, participants optionally rated a total of 186 (SD 97.2, range 44-382), with an average activity rating of 7.9 (SD 1.3, 5.9-9.9). The average per-participant mean daily endorsed activity rating rate was 87.6% (SD 14.2, range 41.8-99.6%).  
+
+On average, participants selected to track during Phase 2 a total of 8 distinct activities (SD 3.8, range 4-17), 38.9% of which were newly added, custom activities they had not tracked during Phase 1 (SD 21.4, range 12-100%). Over the four weeks of Phase 2, participants planned (but did not necessarily complete) a total of 104 activities (SD 69.0, range 20-283); completed (but had not necessarily planned) a total of 88 activities (SD 56.7, range 24-216); and both planned and completed 74 total (SD 54.9, range 14-204) and 7 unique (SD 3.6, range 3-15) activities on average. The per-participant mean daily planned activity completion rate was 81.0% on average (SD 9, range 62.5-95.8%). 
 
 <br>
 
 ##### **Table 4.** Engagement with activity tracking {.unnumbered}
-
+```{=html}
+{{< include "../output/tables/balance_activity_engagement.html" >}}
+```
 
 <br>
 <br>
