@@ -8,7 +8,7 @@ library(gt)
 
 google_font_name <- "Roboto"
 
-results_date <- "20250522"
+results_date <- "20250618"
 parent_file_path <- "balance-quantitative"
 input_file_path <- "output/results"
 input_file_name <- glue::glue("repeated_measures_anovas_{results_date}.csv")
@@ -34,7 +34,9 @@ results <- results %>%
       grepl("promis_pain", outcome) ~ "Pain interference",
       grepl("promis_pf", outcome) ~ "Physical function",
       grepl("promis_sleep", outcome) ~ "Sleep disturbance",
-      grepl("promis_social", outcome) ~ "Social roles and activities"
+      grepl("promis_social", outcome) ~ "Social roles and activities",
+      grepl("physical_health", outcome) ~ "Summary Physical health",
+      grepl("mental_health", outcome) ~ "Summary Mental health"
     ),
     outcome_name = ifelse(grepl("^promis", outcome), paste0("PROMIS ", outcome_name), outcome_name)
   ) 
@@ -107,7 +109,7 @@ ttest_results_to_table <- results %>%
     ),
     comparison = glue::glue("t{ttest_group1} to t{ttest_group2}"),
     across(
-      .cols = c(ttest_estimate, ttest_statistic),
+      .cols = c(ttest_estimate, ttest_statistic, effect_size_cohensd),
       .fns = function(x) round(x, 2)
     ),
     ttest_p_str = case_when(
@@ -116,7 +118,10 @@ ttest_results_to_table <- results %>%
       TRUE ~ as.character(round(ttest_p, 3))
     )
   ) %>%
-  dplyr::select(outcome_name, comparison, ttest_estimate, ttest_df, ttest_statistic, ttest_p_str) %>%
+  dplyr::select(
+    outcome_name, comparison, ttest_estimate, ttest_df, ttest_statistic, 
+    ttest_p_str, ttest_cohensd = effect_size_cohensd
+  ) %>%
   pivot_wider(
     id_cols = outcome_name,
     names_from = comparison,
@@ -134,19 +139,30 @@ results_to_table <- summary_stats_to_table %>%
   full_join(anova_results_to_table, by = "outcome_name") %>%
   full_join(ttest_results_to_table, by = "outcome_name")
 
-insert_row_location <- min(grep("PROMIS", results_to_table$outcome_name))
-insert_row <- tribble(~outcome_name, "PROMIS Subscale t-score")
+insert_row_locations <- c(
+  min(grep("PROMIS", results_to_table$outcome_name)),
+  min(grep("PROMIS Summary", results_to_table$outcome_name))
+)
+
+insert_rows <- tribble(
+  ~outcome_name, 
+  "PROMIS Subscale t-score", 
+  "PROMIS Summary t-score"
+)
 
 results_to_table <- bind_rows(
-  results_to_table[1:(insert_row_location-1), ],
-  insert_row,
-  results_to_table[insert_row_location:nrow(results_to_table), ]
+  results_to_table[1:((insert_row_locations[1])-1), ],
+  insert_rows[1, ],
+  results_to_table[(insert_row_locations[1]):((insert_row_locations[2])-1), ],
+  insert_rows[2, ],
+  results_to_table[(insert_row_locations[2]):nrow(results_to_table), ]
 )
 
 results_to_table <- results_to_table %>%
   mutate(
     outcome_name = case_when(
-      grepl("PROMIS", outcome_name) & !grepl("t-score", outcome_name) ~ gsub("PROMIS ", "\t", outcome_name),
+      grepl("PROMIS", outcome_name) & !grepl("t-score", outcome_name) & !grepl("Summary", outcome_name) ~ gsub("PROMIS ", "\t", outcome_name),
+      grepl("PROMIS Summary", outcome_name) & !grepl("t-score", outcome_name) ~ gsub("PROMIS Summary ", "\t", outcome_name),
       TRUE ~ outcome_name
     ),
     across(
@@ -163,7 +179,7 @@ bolded_rows <- which(!grepl("^\t", results_to_table$outcome_name))
 f_df_footnote_rows <- which(results_to_table$anova_correction_applied == 1)
 
 f_df <- unique(results_to_table[which(results_to_table$anova_correction_applied == 0), ]$anova_df)
-t_df <- unique(results_to_table[which(results_to_table$`ttest_df_t1 to t2` != ""), ]$`ttest_df_t1 to t2`)
+t_df <- max(unique(results_to_table[which(results_to_table$`ttest_df_t1 to t2` != ""), ]$`ttest_df_t1 to t2`))
 
 anova_results_table <- results_to_table %>%
   dplyr::select(
@@ -180,7 +196,8 @@ anova_results_table <- results_to_table %>%
     summarystat_t2 ~ "Midpoint",
     summarystat_t3 ~ "End of study",
     contains("ttest_estimate") ~ "MD",
-    contains("ttest_p") ~ "p-value"
+    contains("ttest_p") ~ "p-value",
+    contains("ttest_cohensd") ~ "Cohen's d"
   ) %>%
   cols_align(
     align = "center",
@@ -246,6 +263,12 @@ anova_results_table <- results_to_table %>%
     footnote = "Mean (SD) [Range]",
     locations = cells_column_labels(
       columns = starts_with("summarystat")
+    )
+  ) %>%
+  tab_footnote(
+    footnote = "N = 1 additional participant missing PROMIS Summary scores at midpoint due to missing pain intensity item response was excluded from these analyses",
+    locations = cells_stub(
+      rows = insert_row_locations[2]+1
     )
   )
 

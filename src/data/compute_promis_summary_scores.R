@@ -1,4 +1,4 @@
-# Compute PROMIS physical and mental health composite scores
+# Compute PROMIS physical and mental health summary scores
 
 # References: 
 # https://pmc.ncbi.nlm.nih.gov/articles/PMC5999556/ 
@@ -34,13 +34,14 @@ scoring_coefficients <- tribble(
   "sleep",           0.002,             -0.139
 )
 
-input_file_path <- "balance-quantitative/data/raw/"
-output_file_path <- "balance-quantitative/data/interim/"
+parent_file_path <- "balance-quantitative"
+input_file_path <- "data/raw/"
+output_file_path <- "data/interim/"
   
 #### pain intensity item ---- 
 
 pain_file <- "BALANCEPhase1StudyDa-PROMISPainIntensity_DATA_2025-06-10_1756.csv"
-pain <- read_csv(here::here(input_file_path, pain_file))
+pain <- read_csv(here::here(parent_file_path, input_file_path, pain_file))
 
 pain_z_scores <- pain %>%
   pivot_longer(
@@ -59,7 +60,7 @@ pain_z_scores <- pain %>%
 #### all other domain scores ----
 
 promis_file <- "BALANCEPhase1StudyDa-PROMIS_DATA_2025-05-08_1218.csv"
-promis <- read_csv(here::here(input_file_path, promis_file))
+promis <- read_csv(here::here(parent_file_path, input_file_path, promis_file))
 
 promis_z_scores <- promis %>%
   pivot_longer(cols = -c("record_id")) %>%
@@ -114,9 +115,19 @@ summary_scores <- z_scores %>%
       .names = "{.col}_t"
     )
   ) %>%
-  rename_all(function(x) gsub("_z_t$", "_t", x))
+  rename_all(function(x) gsub("_z_t$", "_t", x)) %>%
+  rename(timepoint_name = timepoint) %>%
+  mutate(
+    timepoint_number = case_when(
+      timepoint_name == "bl" ~ 1,
+      timepoint_name == "mp" ~ 2,
+      timepoint_name == "eos" ~ 3,
+      TRUE ~ NA_real_
+    )
+  ) %>%
+  relocate(timepoint_number, .after = timepoint_name)
 
 
 #### save output ----
 
-write_csv(summary_scores, here::here(output_file_path, "balance_promis_physical_mental_health_summary_scores.csv"))
+write_csv(summary_scores, here::here(parent_file_path, output_file_path, "balance_promis_summary_scores.csv"))

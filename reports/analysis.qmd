@@ -134,7 +134,7 @@ On average, participants rated the app relatively highly on the System Usability
 
 ### Preliminary effects of the intervention 
 
-Results of the repeated measures ANOVAs and paired t-tests are displayed in Tables 6 and 7, respectively. There was a small but significant effect of study time point on self-reported anxiety (F(2, 40)=3.52, p=0.039, $\eta_g^2$=0.017). Post-hoc pairwise paired t-tests revealed that there were statistically significant declines in PROMIS anxiety subscale t-scores from study baseline to midpoint (mean difference [MD]=-2.69, t(20)=-2.81, p=0.011) and from baseline to end of study (MD=-2.73, t(20)=-2.24, p=0.037); there was no significant change from midpoint to end of study (p=0.98). There were no significant effects of time point on CESD, PEAT, or SIP, or any other PROMIS subscales (all p>0.1).  
+Results of the repeated measures ANOVAs and paired t-tests are displayed in Tables 6 and 7, respectively. There was a small but significant effect of study time point on self-reported anxiety (F(2, 40)=3.52, p=0.039, $\eta_g^2$=0.017). Post-hoc pairwise paired t-tests revealed that there were statistically significant declines in PROMIS anxiety subscale t-scores from study baseline to midpoint (mean difference [MD]=-2.69, t(20)=-2.81, p=0.011) and from baseline to end of study (MD=-2.73, t(20)=-2.24, p=0.037); there was no significant change from midpoint to end of study (p=0.98). There were no significant effects of time point on CESD, PEAT, or SIP, or any other PROMIS subscale or summary physical or mental health scores (all p>0.1).  
 
 There were no significant changes in mean daily goodness score (MD=0.04, p=0.75) or total step count from phase 1 to phase 2 (MD=409.44, p=0.16). There were no significant differences in compliance between phases, in terms of the number of days on which participants rated their daily goodness (p=0.56) or collected sufficient Fitbit data (at least 8 hours; p=0.94).   
 
@@ -142,7 +142,7 @@ There were no significant changes in mean daily goodness score (MD=0.04, p=0.75)
 
 ##### **Table 6.** Effect of study time point on self-reported quality of life measures {.unnumbered}
 ```{=html}
-{{< include "../output/tables/balance_anova_results.html" >}}
+<iframe src="../output/tables/balance_anova_results.html" width="100%" height="800"></iframe>
 ```
 
 <br>

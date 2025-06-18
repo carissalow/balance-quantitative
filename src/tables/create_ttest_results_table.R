@@ -8,7 +8,7 @@ library(gt)
 
 google_font_name <- "Roboto"
 
-results_date <- "20250522"
+results_date <- "20250618"
 parent_file_path <- "balance-quantitative"
 input_file_path <- "output/results"
 input_file_name <- glue::glue("paired_ttests_{results_date}.csv")
@@ -22,7 +22,7 @@ results <- read_csv(here::here(parent_file_path, input_file_path, input_file_nam
 
 ttest_results_to_table <- results %>%
   select(
-    outcome, n, starts_with("data"), mean_difference, t, df, p_value
+    outcome, n, starts_with("data"), mean_difference, t, df, p_value, effect_size_cohensd
   ) %>%
   rowwise() %>%
   mutate(
@@ -43,14 +43,13 @@ ttest_results_to_table <- results %>%
       grepl("n$", outcome) ~ "n"
     ),
     outcome_str = paste0(outcome_name, ", ", outcome_type),
-    t = round(t, 2),
     p_str = case_when(
       round(p_value, 3) < 0.001 ~ "<0.001",
       round(p_value, 3) > 0.999 ~ ">0.999",
       TRUE ~ as.character(round(p_value, 3))
     ),
     across(
-      .cols = matches("mean_|_mean|_sd|_min|_max"),
+      .cols = matches("mean_|_mean|_sd|_min|_max|^t$|cohensd"),
       .fns = function(x) round(x, 2)
     ),
     data_x_range = glue::glue("{data_x_min}, {data_x_max}"),
@@ -60,12 +59,12 @@ ttest_results_to_table <- results %>%
 #### create the table ----
 
 data_y_label <- unique(ttest_results_to_table$data_y)[[1]]
-data_x_label <- unique(ttest_results_to_table$data_x)[[1]]
+data_y_label <- unique(ttest_results_to_table$data_x)[[1]]
 
 ttest_results_table <- ttest_results_to_table %>%
   select(
     outcome_str, n, data_y_mean, data_y_sd, data_y_range, data_x_mean, data_x_sd,
-    data_x_range, mean_difference, t, df, p_str
+    data_x_range, mean_difference, t, df, p_str, effect_size_cohensd
   ) %>%
   gt(
     rowname_col = "outcome_str"
@@ -74,6 +73,7 @@ ttest_results_table <- ttest_results_to_table %>%
     n ~ "n",
     mean_difference ~ "MD",
     p_str ~ "p-value",
+    effect_size_cohensd ~ "Cohen's d",
     ends_with("_mean") ~ "Mean",
     ends_with("_sd") ~ "SD",
     ends_with("_range") ~ "Range"
@@ -152,3 +152,4 @@ ttest_results_table %>%
   gtsave(
     filename = here::here(parent_file_path, output_file_path, glue::glue("{output_file_name}.html"))
   )
+  

@@ -1,6 +1,7 @@
 # Paired t-tests
 
 library(tidyverse)
+library(rstatix)
 
 #### helper functions ----
 
@@ -16,7 +17,23 @@ paired_t_test <- function(data, x, y, id) {
     drop_na() %>%
     arrange(get(id))
   
-  res <- t.test(x = data_for_test[[x]], y = data_for_test[[y]], paired = TRUE)
+  # paired t-test
+  res <- t.test(x = data_for_test[[x]], y = data_for_test[[y]], paired = TRUE) 
+  
+  # effect size
+  d_res <- data_for_test %>%
+    pivot_longer(
+      cols = -all_of(id),
+      names_to = "x", 
+      values_to = "y"
+    ) %>%
+    arrange(get(id), x) %>%
+    mutate(x = forcats::fct_rev(factor(x))) %>%
+    rstatix::cohens_d(
+      data = .,
+      formula = y ~ x,
+      paired = TRUE
+    )
   
   out <- do.call(cbind, res) %>%
     as.data.frame() %>%
@@ -29,6 +46,8 @@ paired_t_test <- function(data, x, y, id) {
     ) %>%
     dplyr::select(-data.name) %>%
     mutate(
+      effect_size_cohensd = d_res$effsize,
+      effect_size_magnitude = d_res$magnitude,
       data_x = x,
       data_y = y,
       data_x_mean = mean(data_for_test[[x]], na.rm = TRUE),
@@ -45,7 +64,7 @@ paired_t_test <- function(data, x, y, id) {
     rename(
       t = statistic,
       df = parameter,
-      mean_difference = estimate,
+      mean_difference = estimate
     ) %>%
     dplyr::select(
       n, starts_with("data"), method, alternative, everything()

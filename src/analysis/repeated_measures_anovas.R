@@ -5,7 +5,7 @@ library(rstatix)
 
 #### helper functions ----
 
-repeated_measures_anova <- function(data, outcome, time, id, p_adjust_method = "none") {
+repeated_measures_anova <- function(data, outcome, time, id, p_adjust_method = "none", comparisons = list()) {
   required_cols <- c(id, time, outcome)
   if (!all(required_cols %in% colnames(data))) {
     stop("One or more columns is missing from the data")
@@ -54,11 +54,15 @@ repeated_measures_anova <- function(data, outcome, time, id, p_adjust_method = "
     pool.sd = FALSE,
     p.adjust.method = p_adjust_method,
     detailed = TRUE,
-    comparisons = list(
-      c(2,1),
-      c(3,1),
-      c(3,2)
-    )
+    comparisons = comparisons
+  )
+  
+  # effect size
+  d_res <- rstatix::cohens_d(
+    data = data_for_test,
+    formula = as.formula(ttest_formula),
+    paired = TRUE,
+    comparisons = comparisons
   )
   
   # collect results
@@ -74,6 +78,8 @@ repeated_measures_anova <- function(data, outcome, time, id, p_adjust_method = "
     ttest_poolsd = attributes(ttest_res)$args$pool.sd,
     ttest = ttest_res,
     p_adj_method = p_adjust_method,
+    effect_size_cohensd = d_res$effsize,
+    effect_size_magnitude = d_res$magnitude,
     row.names = NULL
   )
   
@@ -97,17 +103,21 @@ date_suffix <- gsub("-", "", today())
 
 parent_file_path <- "balance-quantitative"
 input_file_path <- "data/interim/"
-input_file_name <- "balance_outcomes.csv"
+input_file_names <- list("balance_outcomes.csv", "balance_promis_summary_scores.csv")
 output_file_path <- "output/results"
 output_file_name <- glue::glue("repeated_measures_anovas_{date_suffix}.csv")
 
-outcomes <- read_csv(here::here(parent_file_path, input_file_path, input_file_name))
+join_cols <- c("record_id", "timepoint_name", "timepoint_number")
+
+outcomes <- input_file_names %>%
+  purrr::map(function(x) read_csv(here::here(parent_file_path, input_file_path, x))) %>%
+  purrr::reduce(full_join, by = join_cols)
 
 
 #### format data ----
 
 scale_score_cols <- grep(".*_score$", colnames(outcomes), value = TRUE)
-promis_score_cols <- grep("^promis_.*_t_.*$", colnames(outcomes), value = TRUE)
+promis_score_cols <- grep("^promis_.*_t_.*$|^promis_summary_.*_t$", colnames(outcomes), value = TRUE)
 score_cols <- c(scale_score_cols, promis_score_cols)
 
 outcomes_for_analysis <- outcomes %>%
@@ -119,6 +129,12 @@ outcomes_for_analysis <- outcomes %>%
 
 #### repeated measures ANOVAs with post-hoc pairwise paired t-tests ----
 
+comparisons <- list(
+  c(2,1),
+  c(3,1),
+  c(3,2)
+)
+
 anova_results <- data.frame()
 
 for (outcome in score_cols) {
@@ -127,7 +143,8 @@ for (outcome in score_cols) {
     outcome = outcome,
     time = "timepoint",
     id = "record_id",
-    p_adjust_method = "none"
+    p_adjust_method = "none",
+    comparisons = comparisons
   )
   anova_results <- bind_rows(anova_results, result)
 }
